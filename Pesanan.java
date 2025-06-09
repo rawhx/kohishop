@@ -1,8 +1,9 @@
 import java.util.*;
+import matauang.*;
 import menu.*;
 import pembayaran.*;
-import matauang.*;
-import utils.S;
+import utils.*;
+import model.*;
 
 public class Pesanan {
     private List<ItemPesanan> daftarPesanan = new LinkedList<>();
@@ -60,18 +61,40 @@ public class Pesanan {
     }
 
     public final void showPesanan() {
-        if (!daftarPesanan.isEmpty()) {
-            S.move(1, S.y); System.out.print("Kode");
-            S.move(10, S.y); System.out.print("Nama Menu");
-            S.move(50, S.y++); System.out.println("Kuantitas");
-
-            for (ItemPesanan item : daftarPesanan) {
-                S.move(1, S.y); System.out.print(item.menu().getKode());
-                S.move(10, S.y); System.out.print(item.menu().getNama());
-                S.move(50, S.y++); System.out.println(item.qty());
-            }
-        } else {
+        if (daftarPesanan.isEmpty()) {
             S.move(1, S.y++); System.out.println("Belum ada pesanan.");
+            return;
+        }
+
+        List<ItemPesanan> sortedList = new ArrayList<>(daftarPesanan);
+        Sort.selectionSortHarga(sortedList);
+
+        List<ItemPesanan> minumanList = new ArrayList<>();
+        List<ItemPesanan> makananList = new ArrayList<>();
+
+        for (ItemPesanan item : sortedList) {
+            if (item.menu() instanceof Minuman) {
+                minumanList.add(item);
+            } else if (item.menu() instanceof Makanan) {
+                makananList.add(item);
+            }
+        }
+
+        tampilkanKategori("Minuman", minumanList);
+        tampilkanKategori("Makanan", makananList);
+    }
+
+    private void tampilkanKategori(String judul, List<ItemPesanan> list) {
+        if (list.isEmpty()) return;
+
+        S.move(1, S.y); System.out.print("Kode");
+        S.move(10, S.y); System.out.print(judul);
+        S.move(50, S.y++); System.out.println("Kuantitas");
+
+        for (ItemPesanan item : list) {
+            S.move(1, S.y); System.out.print(item.menu().getKode());
+            S.move(10, S.y); System.out.print(item.menu().getNama());
+            S.move(50, S.y++); System.out.println(item.qty());
         }
     }
 
@@ -147,6 +170,4 @@ public class Pesanan {
             }
         }
     }
-
-    public record ItemPesanan(Menu menu, int qty) {}
 }

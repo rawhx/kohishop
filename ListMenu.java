@@ -29,13 +29,15 @@ public final class ListMenu {
     public static final void showMenu() {
         S.clear();
 
+        Sort.selectionSortKode(dataMenu);
+
         S.move(1, S.y); System.out.print("Menu Kedai Kohisop : ");
         S.move(1, ++S.y); System.out.print("Kode");
-        S.move(10, S.y); System.out.print("Menu Minuman");
+        S.move(10, S.y); System.out.print("Menu Makanan");
         S.move(50, S.y++); System.out.print("Harga (Rp)");
 
         for (Menu m : dataMenu) {
-            if (m instanceof Minuman) {
+            if (m instanceof Makanan) {
                 S.move(1, S.y); System.out.print(m.getKode());
                 S.move(10, S.y); System.out.print(m.getNama());
                 S.move(50, S.y++); System.out.println(m.getHarga());
@@ -43,12 +45,12 @@ public final class ListMenu {
         }
 
         S.move(1, ++S.y); System.out.print("Kode");
-        S.move(10, S.y); System.out.print("Menu Makanan");
+        S.move(10, S.y); System.out.print("Menu Minuman");
         S.move(50, S.y++); System.out.print("Harga (Rp)");
 
         for (Menu m : dataMenu) {
-            if (m instanceof Makanan) {
-                S.move(1, ++S.y); System.out.print(m.getKode());
+            if (m instanceof Minuman) {
+                S.move(1, S.y); System.out.print(m.getKode());
                 S.move(10, S.y); System.out.print(m.getNama());
                 S.move(50, S.y++); System.out.println(m.getHarga());
             }

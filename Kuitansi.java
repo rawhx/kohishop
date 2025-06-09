@@ -2,6 +2,7 @@ import menu.Menu;
 import menu.Makanan;
 import menu.Minuman;
 import pembayaran.*;
+import model.*;
 import utils.S;
 
 class Kuitansi {
@@ -20,7 +21,7 @@ class Kuitansi {
 
         boolean adaMinuman = false, adaMakanan = false;
 
-        for (Pesanan.ItemPesanan item : pesanan.getDaftarPesanan()) {
+        for (ItemPesanan item : pesanan.getDaftarPesanan()) {
             if (item.menu() instanceof Minuman) {
                 if (!adaMinuman) {
                     S.move(1, ++S.y); System.out.println("Minuman:");
@@ -38,7 +39,7 @@ class Kuitansi {
             }
         }
 
-        for (Pesanan.ItemPesanan item : pesanan.getDaftarPesanan()) {
+        for (ItemPesanan item : pesanan.getDaftarPesanan()) {
             if (item.menu() instanceof Makanan) {
                 if (!adaMakanan) {
                     S.move(1, ++S.y); System.out.println("Makanan:");
