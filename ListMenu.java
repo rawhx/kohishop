@@ -28,6 +28,7 @@ public final class ListMenu {
 
     public static final void showMenu() {
         S.clear();
+        S.y = 1;
 
         Sort.selectionSortKode(dataMenu);
 

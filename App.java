@@ -1,46 +1,61 @@
 import java.util.*;
 import menu.*;
+import model.*;
 import utils.*;
 
 class App {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in); 
         Pesanan pesanan = new Pesanan();
+        Membership membership = new Membership();
+        String akhirProses;
 
         try {
-            ListMenu.showMenu();
-
-            while (true) {
-                S.move(1, S.y++); System.out.println("==========================================================");
-                S.move(1, S.y++); System.out.print("Pilih menu (kode) ~ cc untuk membatalkan pesanan : ");
-                String kodeMenu = scanner.next();
-
-                if (kodeMenu.equalsIgnoreCase("CC")) {
-                    throw new RuntimeException("Pesanan dibatalkan oleh pengguna");
+            do {
+                ListMenu.showMenu();
+    
+                while (true) {
+                    S.move(1, S.y++); System.out.println("==========================================================");
+                    S.move(1, S.y++); System.out.print("Pilih menu (kode) ~ cc untuk membatalkan pesanan : ");
+                    String kodeMenu = scanner.next();
+    
+                    if (kodeMenu.equalsIgnoreCase("CC")) {
+                        throw new RuntimeException("Pesanan dibatalkan oleh pengguna");
+                    }
+    
+                    Menu menuDipilih = ListMenu.cekMenuByKode(kodeMenu);
+                    if (menuDipilih == null) {
+                        S.move(1, S.y++); System.out.println("Menu tidak ditemukan!");
+                        continue;
+                    }
+    
+                    scanner.nextLine(); 
+                    if (!inputQty(scanner, pesanan, menuDipilih)) continue;
+    
+                    pesanan.showPesanan();
+    
+                    S.move(1, S.y++); System.out.println("==========================================================");
+                    S.move(1, S.y++); System.out.print("Tambah Pesanan (y/n) : ");
+                    String tambah = scanner.nextLine().trim();
+                    if (tambah.isEmpty() || tambah.equalsIgnoreCase("y")) continue;
+                    break;
                 }
-
-                Menu menuDipilih = ListMenu.cekMenuByKode(kodeMenu);
-                if (menuDipilih == null) {
-                    S.move(1, S.y++); System.out.println("Menu tidak ditemukan!");
-                    continue;
-                }
-
-                scanner.nextLine(); 
-                if (!inputQty(scanner, pesanan, menuDipilih)) continue;
-
-                pesanan.showPesanan();
-
-                S.move(1, S.y++); System.out.println("==========================================================");
-                S.move(1, S.y++); System.out.print("Tambah Pesanan (y/n) : ");
-                String tambah = scanner.nextLine().trim();
-                if (tambah.isEmpty() || tambah.equalsIgnoreCase("y")) continue;
-                break;
-            }
-
-            pesanan.showPembayaran();
-
-            Kuitansi kuitansi = new Kuitansi();
-            kuitansi.showKuitansi(pesanan);
+    
+                Member member = null;
+                do {
+                    member = membership.prosesMembership();
+                } while (member == null);
+                
+    
+                ProsesPembayaran bayar = new ProsesPembayaran(member.kodeA() ? pesanan.totalPesanan() : pesanan.totalPesananTanpaPajak());
+                bayar.proses(member);
+    
+                Kuitansi kuitansi = new Kuitansi();
+                kuitansi.showKuitansi(pesanan, bayar, member);
+                
+                S.move(1, S.y++); System.out.print("Proses lagi? (y/n) : ");
+                akhirProses = scanner.nextLine().trim();
+            } while (akhirProses.equalsIgnoreCase("y") || akhirProses.isEmpty());
 
         } catch (Exception e) {
             S.move(1, S.y++); System.out.println(e.getMessage());
