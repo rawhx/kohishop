@@ -47,7 +47,7 @@ class App {
                 } while (member == null);
                 
     
-                ProsesPembayaran bayar = new ProsesPembayaran(member.kodeA() ? pesanan.totalPesanan() : pesanan.totalPesananTanpaPajak());
+                ProsesPembayaran bayar = new ProsesPembayaran(member.kodeA() ? pesanan.totalPesananTanpaPajak() : pesanan.totalPesanan());
                 bayar.proses(member);
     
                 Kuitansi kuitansi = new Kuitansi();
