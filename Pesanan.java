@@ -68,8 +68,8 @@ public class Pesanan {
             }
         }
 
-        tampilkanKategori("Minuman", minumanList);
         tampilkanKategori("Makanan", makananList);
+        tampilkanKategori("Minuman", minumanList);
     }
 
     private void tampilkanKategori(String judul, List<ItemPesanan> list) {
