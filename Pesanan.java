@@ -54,13 +54,12 @@ public class Pesanan {
             return;
         }
 
-        List<ItemPesanan> sortedList = new ArrayList<>(daftarPesanan);
-        Sort.selectionSortHarga(sortedList);
+        Sort.selectionSortHarga(daftarPesanan);
 
         List<ItemPesanan> minumanList = new ArrayList<>();
         List<ItemPesanan> makananList = new ArrayList<>();
 
-        for (ItemPesanan item : sortedList) {
+        for (ItemPesanan item : daftarPesanan) {
             if (item.menu() instanceof Minuman) {
                 minumanList.add(item);
             } else if (item.menu() instanceof Makanan) {
@@ -68,8 +67,8 @@ public class Pesanan {
             }
         }
 
-        tampilkanKategori("Minuman", minumanList);
         tampilkanKategori("Makanan", makananList);
+        tampilkanKategori("Minuman", minumanList);
     }
 
     private void tampilkanKategori(String judul, List<ItemPesanan> list) {
