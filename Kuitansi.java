@@ -75,7 +75,7 @@ class Kuitansi {
         } 
 
         S.move(1, ++S.y); System.out.println("-------------------------------------------------------------------------------------------------------");
-        S.move(1, ++S.y); System.out.println("Total sebelum pajak (IDR) : " + totalTanpaPajak);
+        S.move(1, ++S.y); System.out.println("Total sebelum pajak (IDR) : " + pesanan.totalPesananTanpaPajak());
         S.move(1, ++S.y); System.out.println("Total setelah pajak (IDR) : " + pesanan.totalPesanan());
         S.move(1, ++S.y); System.out.println("-------------------------------------------------------------------------------------------------------");
         S.move(1, ++S.y); System.out.println("Pembayaran : " + (metode != null ? metode.getNama() : ""));
