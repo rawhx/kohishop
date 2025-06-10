@@ -61,7 +61,7 @@ public final class ProsesPembayaran {
 
             S.move(1, S.y++); System.out.println("==========================================================");
             if (pembayaran.bayar()) {
-                member.tambahPoint(1);
+                if (mataUang == null) member.tambahPoint(1);
                 S.move(1, S.y++); System.out.println("Pembayaran berhasil!");
                 break;
             } else {
@@ -128,7 +128,7 @@ public final class ProsesPembayaran {
     private double inputSaldo() {
         while (true) {
             try {
-                return Double.parseDouble(input.nextLine().trim());
+                return input.nextDouble();
             } catch (NumberFormatException e) {
                 S.move(1, S.y++); System.out.print("Input tidak valid. Masukkan angka: ");
             }

@@ -89,7 +89,7 @@ class Kuitansi {
 
         double totalSebelum = (mataUang == null ? pesanan.totalPesananTanpaPajak() : mataUang.konversi(pesanan.totalPesananTanpaPajak()));
         double totalAkhir = (mataUang == null ? pesanan.totalPesanan() + admin - diskon : mataUang.konversi(pesanan.totalPesanan()) + admin - diskon);
-        double totalDibayar = (mataUang == null ? pembayaran.getTotal() + admin - diskon : mataUang.konversi(pembayaran.getTotal()) + admin - diskon);
+        double totalDibayar = pembayaran.getTotal() + admin - diskon;
         
         S.move(1, ++S.y); System.out.println("Total Tagihan sebelum pajak, admin, dan diskon (" + namaMataUang + ") : " + Math.round(totalSebelum * 100.0) / 100.0);
         S.move(1, ++S.y); System.out.println("Total Tagihan sesudah pajak, admin, dan diskon (" + namaMataUang + ") : " + Math.round(totalAkhir * 100.0) / 100.0);
