@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 import matauang.MataUang;
 import menu.*;
 import pembayaran.*;
@@ -18,43 +21,19 @@ class Kuitansi {
         S.move(90, S.y); System.out.println("SubTotal (Rp)");
         S.move(1, ++S.y); System.out.println("-------------------------------------------------------------------------------------------------------");
 
-        boolean adaMinuman = false, adaMakanan = false;
+        List<ItemPesanan> minumanList = new ArrayList<>();
+        List<ItemPesanan> makananList = new ArrayList<>();
 
         for (ItemPesanan item : pesanan.getDaftarPesanan()) {
             if (item.menu() instanceof Minuman) {
-                if (!adaMinuman) {
-                    S.move(1, ++S.y); System.out.println("Minuman:");
-                    adaMinuman = true;
-                }
-                Menu minuman = item.menu();
-                int qty = item.qty();
-                double subtotal = (minuman.getHarga() + minuman.pajak()) * qty;
-                S.move(1, ++S.y); System.out.print(minuman.getKode());
-                S.move(10, S.y); System.out.print(minuman.getNama());
-                S.move(45, S.y); System.out.print(qty);
-                S.move(55, S.y); System.out.print(minuman.getHarga());
-                S.move(70, S.y); System.out.print(minuman.pajak() * qty);
-                S.move(90, S.y); System.out.println(Math.round(subtotal * 100.0) / 100.0);
+                minumanList.add(item);
+            } else if (item.menu() instanceof Makanan) {
+                makananList.add(item);
             }
         }
 
-        for (ItemPesanan item : pesanan.getDaftarPesanan()) {
-            if (item.menu() instanceof Makanan) {
-                if (!adaMakanan) {
-                    S.move(1, ++S.y); System.out.println("Makanan:");
-                    adaMakanan = true;
-                }
-                Menu makanan = item.menu();
-                int qty = item.qty();
-                double subtotal = (makanan.getHarga() + makanan.pajak()) * qty;
-                S.move(1, ++S.y); System.out.print(makanan.getKode());
-                S.move(10, S.y); System.out.print(makanan.getNama());
-                S.move(45, S.y); System.out.print(qty);
-                S.move(55, S.y); System.out.print(makanan.getHarga());
-                S.move(70, S.y); System.out.print(makanan.pajak() * qty);
-                S.move(90, S.y); System.out.println(Math.round(subtotal * 100.0) / 100.0);
-            }
-        }
+        daftarPesanan("Makanan", makananList);
+        daftarPesanan("Minuman", minumanList);
 
         MataUang mataUang = pembayaran.getMataUang();
         String namaMataUang = (mataUang == null ? "IDR" : mataUang.getNama());
@@ -111,5 +90,22 @@ class Kuitansi {
         S.move(1, ++S.y); System.out.println("========================================================================================================");
         S.move(32, ++S.y); System.out.println("TERIMA KASIH SILAHKAN DATANG KEMBALI");
         S.move(1, ++S.y); System.out.println("========================================================================================================");
+    }
+
+    public void daftarPesanan(String tipe, List<ItemPesanan> data) {
+        if (data.isEmpty()) return;
+
+        S.move(1, ++S.y); System.out.println(tipe + ":");
+        for (ItemPesanan item : data) {
+            Menu menu = item.menu();
+            int qty = item.qty();
+            double subtotal = (menu.getHarga() + menu.pajak()) * qty;
+            S.move(1, ++S.y); System.out.print(menu.getKode());
+            S.move(10, S.y); System.out.print(menu.getNama());
+            S.move(45, S.y); System.out.print(qty);
+            S.move(55, S.y); System.out.print(menu.getHarga());
+            S.move(70, S.y); System.out.print(menu.pajak() * qty);
+            S.move(90, S.y); System.out.println(Math.round(subtotal * 100.0) / 100.0);
+        }
     }
 }
