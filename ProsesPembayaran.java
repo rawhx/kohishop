@@ -61,7 +61,7 @@ public final class ProsesPembayaran {
 
             S.move(1, S.y++); System.out.println("==========================================================");
             if (pembayaran.bayar()) {
-                member.tambahPoint(1);
+                if (mataUang == null) member.tambahPoint(1);
                 S.move(1, S.y++); System.out.println("Pembayaran berhasil!");
                 break;
             } else {
