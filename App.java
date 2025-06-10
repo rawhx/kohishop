@@ -50,6 +50,7 @@ class App {
                 ProsesPembayaran bayar = new ProsesPembayaran(member.kodeA() ? pesanan.totalPesananTanpaPajak() : pesanan.totalPesanan());
                 bayar.proses(member);
     
+                if (bayar.getMataUang() == null) member.tambahPoint((int) pesanan.totalPesananTanpaPajak() / 10);
                 Kuitansi kuitansi = new Kuitansi();
                 kuitansi.showKuitansi(pesanan, bayar, member);
                 
