@@ -1,231 +1,88 @@
-import java.util.Scanner;
+import java.util.*;
 import menu.*;
-import pembayaran.*;
-import matauang.*;
-import utils.S;
+import utils.*;
+import model.*;
 
 public class Pesanan {
-    private Object pesananMakanan[][] = new Object[5][2];
-    private Object pesananMinuman[][] = new Object[5][2];
-
-    private Pembayaran pembayaran;
-    private MataUang mataUang = null;
+    private List<ItemPesanan> daftarPesanan = new LinkedList<>();
 
     public void addPesanan(Menu menu, int qty) {
-        if (menu instanceof Makanan) {
-            boolean added = false;
-            for (int i = 0; i < pesananMakanan.length; i++) {
-                if (pesananMakanan[i][0] == null) {
-                    pesananMakanan[i][0] = menu;
-                    pesananMakanan[i][1] = qty;
-                    added = true;
-                    break;
-                }
-            }
-            if (!added) {
-                System.out.println("Pesanan makanan sudah penuh!");
-            }
-        } else if (menu instanceof Minuman) {
-            boolean added = false;
-            for (int i = 0; i < pesananMinuman.length; i++) {
-                if (pesananMinuman[i][0] == null) {
-                    pesananMinuman[i][0] = menu;
-                    pesananMinuman[i][1] = qty;
-                    added = true;
-                    break;
-                }
-            }
-            if (!added) {
-                System.out.println("Pesanan minuman sudah penuh!");
-            }
+        int jumlahMakanan = 0;
+        int jumlahMinuman = 0;
+
+        for (ItemPesanan item : daftarPesanan) {
+            if (item.menu() instanceof Makanan) jumlahMakanan++;
+            else if (item.menu() instanceof Minuman) jumlahMinuman++;
         }
+
+        if (menu instanceof Makanan && jumlahMakanan >= 5) {
+            System.out.println("Jumlah pesanan makanan sudah mencapai batas maksimum (5)!");
+            return;
+        }
+
+        if (menu instanceof Minuman && jumlahMinuman >= 5) {
+            System.out.println("Jumlah pesanan minuman sudah mencapai batas maksimum (5)!");
+            return;
+        }
+
+        daftarPesanan.add(new ItemPesanan(menu, qty));
     }
 
     public double totalPesanan() {
-        double jmlh = 0;
-
-        for (int i = 0; i < pesananMakanan.length; i++) {
-            if (pesananMakanan[i][0] != null) {
-                Menu makanan = (Menu) pesananMakanan[i][0]; // polimorfisme array object -> menu
-                jmlh += (makanan.getHarga() * (int) pesananMakanan[i][1]) + (makanan.pajak() * (int) pesananMakanan[i][1]);
-            }
+        double total = 0;
+        for (ItemPesanan item : daftarPesanan) {
+            total += (item.menu().getHarga() + item.menu().pajak()) * item.qty();
         }
-        for (int i = 0; i < pesananMinuman.length; i++) {
-            if (pesananMinuman[i][0] != null) {
-                Menu minuman = (Menu) pesananMinuman[i][0]; // polimorfisme array object -> menu
-                jmlh += (minuman.getHarga() * (int) pesananMinuman[i][1]) + (minuman.pajak() * (int) pesananMinuman[i][1]);
-            }
-        }
-        
-        return Math.round(jmlh * 100.0) / 100.0;
+        return Math.round(total * 100.0) / 100.0;
     }
 
     public double totalPesananTanpaPajak() {
-        double jmlh = 0;
-
-        for (int i = 0; i < pesananMakanan.length; i++) {
-            if (pesananMakanan[i][0] != null) {
-                Menu makanan = (Menu) pesananMakanan[i][0]; // polimorfisme array object -> menu
-                jmlh += (makanan.getHarga() * (int) pesananMakanan[i][1]);
-            }
+        double total = 0;
+        for (ItemPesanan item : daftarPesanan) {
+            total += item.menu().getHarga() * item.qty();
         }
-        for (int i = 0; i < pesananMinuman.length; i++) {
-            if (pesananMinuman[i][0] != null) {
-                Menu minuman = (Menu) pesananMinuman[i][0]; // polimorfisme array object -> menu
-                jmlh += (minuman.getHarga() * (int) pesananMinuman[i][1]);
-            }
-        }
-        
-        return Math.round(jmlh * 100.0) / 100.0;
+        return Math.round(total * 100.0) / 100.0;
     }
 
-    public Object[][] getPesananMakanan() {
-        return this.pesananMakanan;
-    }
-
-    public Object[][] getPesananMinuman() {
-        return this.pesananMinuman;
-    }
-
-    public Pembayaran getPembayaran() {
-        return this.pembayaran;
-    }
-
-    public MataUang getMataUang() {
-        return this.mataUang;
+    public List<ItemPesanan> getDaftarPesanan() {
+        return this.daftarPesanan;
     }
 
     public final void showPesanan() {
-        boolean adaMinuman = false, adaMakanan = false;
-        
-        for (int i = 0; i < pesananMinuman.length; i++) {
-            if (pesananMinuman[i][0] != null) {
-                adaMinuman = true;
-            }
-            if (pesananMakanan[i][0] != null) {
-                adaMakanan = true;
-            }
+        if (daftarPesanan.isEmpty()) {
+            S.move(1, S.y++); System.out.println("Belum ada pesanan.");
+            return;
         }
 
-        if (adaMinuman) {
-            S.move(1, S.y); System.out.print("Kode");
-            S.move(10, S.y); System.out.print("Menu Minuman");
-            S.move(50, S.y++); System.out.println("Kuantitas");
-        }
+        List<ItemPesanan> sortedList = new ArrayList<>(daftarPesanan);
+        Sort.selectionSortHarga(sortedList);
 
-        for (int i = 0; i < pesananMinuman.length; i++) {
-            if (pesananMinuman[i][0] != null) {
-                Menu minuman = (Menu) pesananMinuman[i][0]; // polimorfisme array object -> menu
-                S.move(1, S.y); System.out.print(minuman.getKode());
-                S.move(10, S.y); System.out.print(minuman.getNama());
-                S.move(50, S.y++); System.out.println(pesananMinuman[i][1]);
+        List<ItemPesanan> minumanList = new ArrayList<>();
+        List<ItemPesanan> makananList = new ArrayList<>();
+
+        for (ItemPesanan item : sortedList) {
+            if (item.menu() instanceof Minuman) {
+                minumanList.add(item);
+            } else if (item.menu() instanceof Makanan) {
+                makananList.add(item);
             }
         }
 
-        
-        if (adaMakanan) {
-            S.move(1, S.y); System.out.print("Kode");
-            S.move(10, S.y); System.out.print("Menu Makanan");
-            S.move(50, S.y++); System.out.println("Kuantitas");    
-        }
-
-        for (int i = 0; i < pesananMakanan.length; i++) {
-            if (pesananMakanan[i][0] != null) {
-                Menu makanan = (Menu) pesananMakanan[i][0]; // polimorfisme array object -> menu
-                S.move(1, S.y); System.out.print(makanan.getKode());
-                S.move(10, S.y); System.out.print(makanan.getNama());
-                S.move(50, S.y++); System.out.println(pesananMakanan[i][1]);
-            }
-        }
+        tampilkanKategori("Minuman", minumanList);
+        tampilkanKategori("Makanan", makananList);
     }
 
-    public final MataUang showMataUang() {
-        Scanner input = new Scanner(System.in);
-        S.move(1, S.y++); System.out.println("==========================================================");
-        S.move(1, S.y++); System.out.println("Konversi Mata Uang : "); 
-        S.move(1, S.y++); System.out.println("1. IDR");
-        S.move(1, S.y++); System.out.println("2. USD");
-        S.move(1, S.y++); System.out.println("3. EUR");
-        S.move(1, S.y++); System.out.println("4. JPY");
-        S.move(1, S.y++); System.out.println("5. MYR");
-        String inputMataUang;
-        MataUang mataUang = null;
-        while (true) {
-            S.move(1, S.y++); System.out.print("Pilih mata uang (1/2/3/4/5) : ");
-            inputMataUang = input.next().trim();
-            switch (inputMataUang) {
-                case "1":
-                    mataUang = null;
-                    break;
-                case "2":
-                    mataUang = new USD();
-                    break;
-                case "3":
-                    mataUang = new EUR();
-                    break;
-                case "4":
-                    mataUang = new JPY();
-                    break;
-                case "5":
-                    mataUang = new MYR();
-                    break;
-                default:
-                    mataUang = null;
-                    break; 
-            }
-            break;
+    private void tampilkanKategori(String judul, List<ItemPesanan> list) {
+        if (list.isEmpty()) return;
+
+        S.move(1, S.y); System.out.print("Kode");
+        S.move(10, S.y); System.out.print(judul);
+        S.move(50, S.y++); System.out.println("Kuantitas");
+
+        for (ItemPesanan item : list) {
+            S.move(1, S.y); System.out.print(item.menu().getKode());
+            S.move(10, S.y); System.out.print(item.menu().getNama());
+            S.move(50, S.y++); System.out.println(item.qty());
         }
-        return mataUang;
     }
-
-    public final void showPembayaran() {
-        Scanner input = new Scanner(System.in);
-    
-        while (true) {
-            mataUang = showMataUang(); // Pilih mata uang
-            double total = mataUang == null ? totalPesanan() : mataUang.konversi(totalPesanan()); // total pesanan sudah dikonversi
-            String namaMataUang = mataUang == null ? "IDR" : mataUang.getNama(); 
-            S.move(1, S.y++);System.out.println("==========================================================");
-            S.move(1, S.y++); System.out.println("Total Pesanan (IDR) : " + totalPesanan());
-            S.move(1, S.y++); System.out.println("Total Pesanan ("+ namaMataUang +") : " + total);
-            S.move(1, S.y++);System.out.println("==========================================================");
-
-            S.move(1, S.y++); System.out.println("Metode Pembayaran : ");
-            S.move(1, S.y++); System.out.println("1. Cash");
-            S.move(1, S.y++); System.out.println("2. Emoney");
-            S.move(1, S.y++); System.out.println("3. QRIS");
-    
-            S.move(1, S.y++); System.out.print("Pilih metode pembayaran (1/2/3) : ");
-            String inputPembayaran = input.next();
-    
-            switch (inputPembayaran) {
-                case "1":
-                    pembayaran = new Tunai(total);
-                    break;
-                case "2":
-                    S.move(1, S.y++); System.out.print("Masukkan saldo emoney : ");
-                    double saldoEmoney = input.nextDouble();
-                    pembayaran = new Emoney(total, saldoEmoney);
-                    ((Emoney) pembayaran).setAdmin(mataUang); // set admin fee
-                    break;
-                case "3":
-                    S.move(1, S.y++); System.out.print("Masukkan saldo QRIS : ");
-                    double saldoQris = input.nextDouble();
-                    pembayaran = new Qris(total, saldoQris);
-                    break;
-                default:
-                    S.move(1, S.y++); System.out.println("Metode tidak valid, ulangi.");
-                    continue;
-            }
-    
-            S.move(1, S.y++);System.out.println("==========================================================");
-            if (pembayaran.bayar()) {
-                S.move(1, S.y++); System.out.println("Pembayaran berhasil!");
-                break;
-            } else {
-                S.move(1, S.y++); System.out.println("Pembayaran gagal! Silakan pilih mata uang dan metode lagi.");
-            }
-            S.move(1, S.y++);System.out.println("==========================================================");
-        }
-    }    
 }
