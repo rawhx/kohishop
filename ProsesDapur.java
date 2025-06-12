@@ -15,7 +15,7 @@ public class ProsesDapur {
         
         if (!dapur.listMakanan().isEmpty() || !dapur.listMinuman().isEmpty()) {
             S.move(1, S.y);System.out.println("Menu");
-            S.move(45, S.y++);System.out.println("Qty");
+            S.move(45, S.y);System.out.println("Qty");
             S.move(65, S.y++);System.out.println("Harga (IDR)");
             listItem("Makanan", dapur.listMakanan());
             listItem("Minuman", dapur.listMinuman());
@@ -28,7 +28,7 @@ public class ProsesDapur {
         S.move(1, S.y++);System.out.println(nama + " :");
         for (ItemPesanan item : data) {
             S.move(1, S.y);System.out.println(item.menu().getNama());
-            S.move(45, S.y++);System.out.println(item.qty());
+            S.move(45, S.y);System.out.println(item.qty());
             S.move(65, S.y++);System.out.println(item.menu().getHarga());
         }
     }
@@ -38,7 +38,7 @@ public class ProsesDapur {
         S.move(1, S.y++);System.out.println(nama + " :");
         for (ItemPesanan item : data) {
             S.move(1, S.y);System.out.println(item.menu().getNama());
-            S.move(45, S.y++);System.out.println(item.qty());
+            S.move(45, S.y);System.out.println(item.qty());
             S.move(65, S.y++);System.out.println(item.menu().getHarga());
         }
     }
