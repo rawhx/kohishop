@@ -1,5 +1,4 @@
 import java.util.*;
-import menu.*;
 import model.*;
 import utils.*;
 
@@ -12,6 +11,11 @@ class App {
         S.clear();
         do {
             try {
+                if(totalPesanan >= 3) {
+                    ProsesDapur dapurProses = new ProsesDapur();
+                    dapurProses.prosesPesananDapur(dapur);
+                    break;
+                }
                 S.move(1, S.y++); System.out.println("==========================================================");
                 S.move(15, S.y++); System.out.println("Selamat datang di Kohishop!");
                 S.move(1, S.y++); System.out.println("==========================================================");
