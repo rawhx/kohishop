@@ -4,7 +4,10 @@ import utils.*;
 import model.*;
 
 public class Pesanan {
-    private List<ItemPesanan> daftarPesanan = new LinkedList<>();
+    private final List<ItemPesanan> daftarPesanan = new LinkedList<>();
+    private static final int MaxMakanan = 5;
+    private static final int MaxMinuman = 5;
+    private final Scanner scanner = new Scanner(System.in);
 
     public void addPesanan(Menu menu, int qty) {
         int jumlahMakanan = 0;
@@ -15,12 +18,12 @@ public class Pesanan {
             else if (item.menu() instanceof Minuman) jumlahMinuman++;
         }
 
-        if (menu instanceof Makanan && jumlahMakanan >= 5) {
+        if (menu instanceof Makanan && jumlahMakanan >= MaxMakanan) {
             System.out.println("Jumlah pesanan makanan sudah mencapai batas maksimum (5)!");
             return;
         }
 
-        if (menu instanceof Minuman && jumlahMinuman >= 5) {
+        if (menu instanceof Minuman && jumlahMinuman >= MaxMinuman) {
             System.out.println("Jumlah pesanan minuman sudah mencapai batas maksimum (5)!");
             return;
         }
@@ -48,7 +51,7 @@ public class Pesanan {
         return this.daftarPesanan;
     }
 
-    public final void showPesanan() {
+    public void showPesanan() {
         if (daftarPesanan.isEmpty()) {
             S.move(1, S.y++); System.out.println("Belum ada pesanan.");
             return;
@@ -56,15 +59,12 @@ public class Pesanan {
 
         Sort.selectionSortHarga(daftarPesanan);
 
-        List<ItemPesanan> minumanList = new ArrayList<>();
         List<ItemPesanan> makananList = new ArrayList<>();
+        List<ItemPesanan> minumanList = new ArrayList<>();
 
         for (ItemPesanan item : daftarPesanan) {
-            if (item.menu() instanceof Minuman) {
-                minumanList.add(item);
-            } else if (item.menu() instanceof Makanan) {
-                makananList.add(item);
-            }
+            if (item.menu() instanceof Makanan) makananList.add(item);
+            else if (item.menu() instanceof Minuman) minumanList.add(item);
         }
 
         tampilkanKategori("Makanan", makananList);
@@ -82,6 +82,76 @@ public class Pesanan {
             S.move(1, S.y); System.out.print(item.menu().getKode());
             S.move(10, S.y); System.out.print(item.menu().getNama());
             S.move(50, S.y++); System.out.println(item.qty());
+        }
+    }
+
+    public void prosesPesanan() {
+        ListMenu.showMenu();
+        inputPesanan();
+    }
+
+    private void inputPesanan() {
+        while (true) {
+            S.move(1, S.y++);
+            System.out.println("==========================================================");
+            S.move(1, S.y++);
+            System.out.print("Pilih menu (kode) ~ cc untuk membatalkan pesanan : ");
+            String kodeMenu = scanner.next();
+
+            if (kodeMenu.equalsIgnoreCase("CC")) {
+                throw new RuntimeException("Pesanan dibatalkan oleh pengguna");
+            }
+
+            Menu menu = ListMenu.cekMenuByKode(kodeMenu);
+            if (menu == null) {
+                S.move(1, S.y++); System.out.println("Menu tidak ditemukan!");
+                continue;
+            }
+
+            scanner.nextLine();
+            if (!inputQty(menu)) continue;
+
+            showPesanan();
+
+            S.move(1, S.y++);
+            System.out.println("==========================================================");
+            S.move(1, S.y++);
+            System.out.print("Tambah Pesanan (y/n) : ");
+            String tambah = scanner.nextLine().trim();
+            if (!tambah.equalsIgnoreCase("y") && !tambah.isEmpty()) break;
+        }
+    }
+
+    private boolean inputQty(Menu menu) {
+        while (true) {
+            S.move(1, S.y++); System.out.print("qty (0/s => skip menu) : ");
+            String input = scanner.nextLine().trim();
+            input = input.isEmpty() ? "1" : input;
+
+            if (input.equalsIgnoreCase("s") || input.equals("0")) {
+                S.move(1, ++S.y); System.out.println("Skip menu");
+                return false;
+            }
+
+            try {
+                int qty = Integer.parseInt(input);
+                if (qty < 0) throw new NumberFormatException();
+
+                if (menu instanceof Makanan && qty > 2) {
+                    S.move(1, S.y++); System.out.println("Qty melebihi batas maksimal (2)!");
+                    continue;
+                }
+
+                if (menu instanceof Minuman && qty > 3) {
+                    S.move(1, S.y++); System.out.println("Qty melebihi batas maksimal (3)!");
+                    continue;
+                }
+
+                addPesanan(menu, qty);
+                return true;
+            } catch (NumberFormatException e) {
+                S.move(1, S.y++); System.out.println("Kuantitas tidak valid!");
+            }
         }
     }
 }

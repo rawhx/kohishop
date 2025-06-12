@@ -28,28 +28,29 @@ public class Membership {
     public Member prosesMembership() {
         Scanner input = new Scanner(System.in);
         Member member = null;
-        
-        System.out.print("Apakah Anda memiliki kode member? (y/n): ");
-        String jawaban = input.nextLine().trim();
-
-        if (jawaban.equalsIgnoreCase("y")) {
-            System.out.print("Masukkan kode member: ");
-            String kode = input.nextLine().trim();
-            member = cariByKode(kode);
-
-            if (member == null) {
-                System.out.println("Kode member tidak ditemukan.");
+        do { 
+            System.out.print("Apakah Anda memiliki kode member? (y/n): ");
+            String jawaban = input.nextLine().trim();
+    
+            if (jawaban.equalsIgnoreCase("y")) {
+                System.out.print("Masukkan kode member: ");
+                String kode = input.nextLine().trim();
+                member = cariByKode(kode);
+    
+                if (member == null) {
+                    System.out.println("Kode member tidak ditemukan.");
+                } else {
+                    System.out.println("Halo member, " + member.getNama());
+                }
             } else {
-                System.out.println("Halo member, " + member.getNama());
+                System.out.print("Masukkan nama Anda: ");
+                String nama = input.nextLine().trim();
+                member = tambahMember(nama);
+                System.out.println("----------------------------------------------------------------------------");
+                System.out.println("Member berhasil dibuat dengan kode: " + member.getKode());
+                System.out.println("----------------------------------------------------------------------------");
             }
-        } else {
-            System.out.print("Masukkan nama Anda: ");
-            String nama = input.nextLine().trim();
-            member = tambahMember(nama);
-            System.out.println("----------------------------------------------------------------------------");
-            System.out.println("Member berhasil dibuat dengan kode: " + member.getKode());
-            System.out.println("----------------------------------------------------------------------------");
-        }
-        return member;
+        } while (member == null);
+        return member;    
     }
 }
