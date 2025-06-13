@@ -6,7 +6,17 @@ import utils.S;
 import utils.Sort;
 
 public class ProsesDapur {
-    public static void prosesPesananDapur(Dapur dapur) {
+    private Dapur dapur;
+
+    public ProsesDapur() {
+        dapur = new Dapur();
+    }
+
+    public Dapur getData() {
+        return dapur;
+    }
+
+    public void prosesPesananDapur() {
         S.clear();S.y = 1;
         S.move(1, S.y++);System.out.println("=================================================================================");
         S.move(30, S.y++);System.out.println("PROSES DAPUR");
@@ -21,7 +31,7 @@ public class ProsesDapur {
         } else S.move(1, S.y++);System.out.println("Tidak ada Proses");
     }
 
-    private static void listItem(String nama, List<ItemPesanan> data) {
+    private void listItem(String nama, List<ItemPesanan> data) {
         if(data.isEmpty()) return;
         Sort.selectionSortHargaTerbesar(data);
         S.move(1, S.y++);System.out.println(nama + " :");
@@ -32,7 +42,7 @@ public class ProsesDapur {
         }
     }
 
-    private static void listItem(String nama, Deque<ItemPesanan> data) {
+    private void listItem(String nama, Deque<ItemPesanan> data) {
         if(data.isEmpty()) return;
         S.move(1, S.y++);System.out.println(nama + " :");
         for (ItemPesanan item : data) {
