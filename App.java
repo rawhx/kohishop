@@ -5,14 +5,14 @@ import utils.*;
 class App {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Dapur dapur = new Dapur();
+        ProsesDapur prosesDapur = new ProsesDapur();
         Membership membership = new Membership();
         int totalPesanan = 0;
         S.clear();
         do {
             try {
                 if(totalPesanan >= 3) {
-                    ProsesDapur.prosesPesananDapur(dapur);
+                    prosesDapur.prosesPesananDapur();
                     break;
                 }
                 S.move(1, S.y++); System.out.println("=================================================================================");
@@ -33,7 +33,7 @@ class App {
 
                         Member member = membership.prosesMembership();
                         
-                        dapur.addPesanan(pesanan.getDaftarPesanan());
+                        prosesDapur.getData().addPesanan(pesanan.getDaftarPesanan());
                         double total = member.kodeA() ? pesanan.totalPesananTanpaPajak() : pesanan.totalPesanan();
 
                         ProsesPembayaran pembayaran = new ProsesPembayaran(total);
@@ -46,7 +46,7 @@ class App {
                         S.move(1, S.y++);
                         break;
                     case "2":
-                        ProsesDapur.prosesPesananDapur(dapur);
+                        prosesDapur.prosesPesananDapur();
                         break;
                     default:
                         S.move(1, S.y++);System.out.println("==========================================================");
