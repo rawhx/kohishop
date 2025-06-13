@@ -44,19 +44,19 @@ public class Sort {
 
     public static void selectionSortHargaTerbesar(List<ItemPesanan> list) {
         for (int i = 0; i < list.size() - 1; i++) {
-            int maxIndex = i;
+            int minIndex = i;
             for (int j = i + 1; j < list.size(); j++) {
                 double hargaJ = list.get(j).menu().getHarga();
-                double hargaMax = list.get(maxIndex).menu().getHarga();
-                if (hargaJ > hargaMax) {
-                    maxIndex = j;
+                double minIdex = list.get(minIndex).menu().getHarga();
+                if (hargaJ > minIdex) {
+                    minIndex = j;
                 }
             }
 
-            if (maxIndex != i) {
+            if (minIndex != i) {
                 ItemPesanan temp = list.get(i);
-                list.set(i, list.get(maxIndex));
-                list.set(maxIndex, temp);
+                list.set(i, list.get(minIndex));
+                list.set(minIndex, temp);
             }
         }
     }
