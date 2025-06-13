@@ -7,7 +7,7 @@ import utils.S;
 import utils.Sort;
 
 public class ProsesDapur {
-    public void prosesPesananDapur(Dapur dapur) {
+    public static void prosesPesananDapur(Dapur dapur) {
         S.clear();S.y = 1;
         S.move(1, S.y++);System.out.println("==========================================================");
         S.move(20, S.y++);System.out.println("PROSES DAPUR");

@@ -12,8 +12,7 @@ class App {
         do {
             try {
                 if(totalPesanan >= 3) {
-                    ProsesDapur dapurProses = new ProsesDapur();
-                    dapurProses.prosesPesananDapur(dapur);
+                    ProsesDapur.prosesPesananDapur(dapur);
                     break;
                 }
                 S.move(1, S.y++); System.out.println("==========================================================");
@@ -47,8 +46,7 @@ class App {
                         S.move(1, S.y++);
                         break;
                     case "2":
-                        ProsesDapur dapurProses = new ProsesDapur();
-                        dapurProses.prosesPesananDapur(dapur);
+                        ProsesDapur.prosesPesananDapur(dapur);
                         break;
                     default:
                         S.move(1, S.y++);System.out.println("==========================================================");
