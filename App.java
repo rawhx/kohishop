@@ -15,13 +15,13 @@ class App {
                     ProsesDapur.prosesPesananDapur(dapur);
                     break;
                 }
-                S.move(1, S.y++); System.out.println("==========================================================");
-                S.move(15, S.y++); System.out.println("Selamat datang di Kohishop!");
-                S.move(1, S.y++); System.out.println("==========================================================");
+                S.move(1, S.y++); System.out.println("=================================================================================");
+                S.move(25, S.y++); System.out.println("Selamat datang di Kohishop!");
+                S.move(1, S.y++); System.out.println("=================================================================================");
                 S.move(1, S.y++); System.out.println("Silakan pilih menu yang tersedia:");
                 S.move(1, S.y++); System.out.println("1. Pesan Menu");
                 S.move(1, S.y++); System.out.println("2. Lihat Antrian");
-                S.move(1, S.y++); System.out.println("==========================================================");
+                S.move(1, S.y++); System.out.println("=================================================================================");
                 S.move(1, S.y++); System.out.print("Pilih Menu (1/2) : ");
                 String menu = scanner.next();
 
