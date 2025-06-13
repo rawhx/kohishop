@@ -1,7 +1,7 @@
 import java.util.Scanner;
-import pembayaran.*; 
 import matauang.*;
 import model.Member;
+import pembayaran.*;
 import utils.S;
 
 public final class ProsesPembayaran {
@@ -42,7 +42,7 @@ public final class ProsesPembayaran {
             pointOld = member.getPoint();
 
             // memotong point hanya pada mata uang IDR
-            if (mataUang == null && member != null) {
+            if (mataUang == null) {
                 int pointBayar = member.getPointBayar();
 
                 if (pointBayar > 0 && pointBayar >= total) {
